@@ -13,9 +13,9 @@ interface PokemonResults {
 // ! creating fetch Pokemon function
 
 type FetchPokemonResult<T> = T extends undefined
-  ? Promise<PokemonResults[]>
+  ? Promise<PokemonResults>
   : void;
-function fetchPokemon<T extends undefined | ((data: PokemonResults[]) => void)>(
+function fetchPokemon<T extends undefined | ((data: PokemonResults) => void)>(
   url: string,
   cb?: T
 ): FetchPokemonResult<T> {
@@ -28,3 +28,16 @@ function fetchPokemon<T extends undefined | ((data: PokemonResults[]) => void)>(
     return fetch(url).then((resp) => resp.json()) as FetchPokemonResult<T>;
   }
 }
+// fetchPokemon("https://pokeapi.co/api/v2/pokemon?limit=10", (data) => {
+//     data.results.forEach((pokemon) => console.log(pokemon.name));
+     
+        
+// });
+
+(async function() {
+    const data = <PokemonResults>(
+    await fetchPokemon("https://pokeapi.co/api/v2/pokemon?limit=10")
+    );
+    data.results.forEach((pokemon) => console.log(pokemon.name));
+    
+})()
